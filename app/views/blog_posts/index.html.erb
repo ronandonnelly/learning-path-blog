@@ -5,9 +5,10 @@
     <h2><%= link_to blog_post.title, blog_post %></h2>
     <% if blog_post.draft? %>
       <div class="p-2 rounded bg-gray-100 text-gray-900">Draft</div>
+    <% end %> <!-- Add this 'end' to close the first 'if' block -->
     <% if blog_post.scheduled? %>
       <div class="p-2 rounded bg-blue-100 text-gray-900">Scheduled</div>
-    <% end %>
+    <% end %> <!-- Add this 'end' to close the second 'if' block -->
     <%= blog_post.body %>
   </div>
 <% end %>
