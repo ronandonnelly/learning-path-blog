@@ -41,6 +41,25 @@ class BlogPostsController < ApplicationController
     redirect_to root_path
   end
 
+  def like
+    @blog_post = BlogPost.find(params[:id]) # Ensure @blog_post is set
+    like = @blog_post.likes.find_or_create_by(user: current_user)
+
+    if like.persisted?
+      message = 'liked'
+      like.destroy
+    else
+      message = 'unliked'
+      like.save
+    end
+
+    respond_to do |format|
+      format.html { redirect_to @blog_post }
+      format.json { render json: { action: message } }
+    end
+  end
+
+
   private
 
   def blog_post_params

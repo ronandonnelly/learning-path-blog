@@ -7,7 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-
+puts 'running seed'
 user = User.where(email: "ronan@gorails.com").first_or_initialize
 user.update!(
   password: "password",
@@ -16,5 +16,5 @@ user.update!(
 
  100.times do |i|
     blog_post = BlogPost.where(title: "Blog Post #{i}").first_or_initialize 
-    blog_post.update(body: "Hello World", published_at: Time.current)
+    blog_post.update!(body: "Hello World", content: "Test", published_at: Time.current)
  end 
