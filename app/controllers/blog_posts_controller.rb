@@ -5,7 +5,7 @@ class BlogPostsController < ApplicationController
   def index
     @blog_posts = user_signed_in? ? BlogPost.sorted : BlogPost.published.sorted
     @pagy, @blog_posts = pagy(@blog_posts)
-  rescue Pagy::OverflowError 
+  rescue Pagy::OverflowError
     redirect_to root_path(page: 1)
   end
 
@@ -39,26 +39,25 @@ class BlogPostsController < ApplicationController
   def destroy
     @blog_post.destroy
     redirect_to root_path
-  end
+  end 
 
   def like
-    @blog_post = BlogPost.find(params[:id]) # Ensure @blog_post is set
-    like = @blog_post.likes.find_or_create_by(user: current_user)
+    @blog_post = BlogPost.find(params[:id])
+    like = @blog_post.likes.find_by(user: current_user)
 
-    if like.persisted?
-      message = 'liked'
+    if like.present?
       like.destroy
+      flash[:notice] = 'You have unliked this blog post.'
     else
-      message = 'unliked'
-      like.save
+      @blog_post.likes.create(user: current_user)
+      flash[:notice] = 'You have liked this blog post.'
     end
 
     respond_to do |format|
       format.html { redirect_to @blog_post }
-      format.json { render json: { action: message } }
+      format.json { render json: { liked: like.nil?, blog_post_id: @blog_post.id } }
     end
   end
-
 
   private
 
